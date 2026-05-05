@@ -1,0 +1,430 @@
+/* ==========================================================================
+   CAPPYWORKS - CSS ARCHITECTURE
+   ========================================================================== */
+
+/* --- 1. DESIGN TOKENS (Variables) --- */
+:root {
+    --ease-out-expo: cubic-bezier(0.19, 1, 0.22, 1);
+    --bg-color: #f9f7f3;
+    --nav-bg: rgba(243, 241, 237, 0.85);
+    --text-main: #1e1e1e;
+    --text-muted: #707070;
+    --accent: #8c9e7a;
+    --surface-light: rgba(255, 255, 255, 0.6);
+    --border-color: rgba(0,0,0,0.08);
+    --warm-bg: #f3f1ed;
+}
+
+[data-theme="dark"] {
+    --bg-color: #2a2725;
+    --nav-bg: rgba(42, 40, 37, 0.85);
+    --text-main: #ECE8DF;
+    --text-muted: #a09d96;
+    --accent: #A8B98A;
+    --surface-light: rgba(51, 48, 46, 0.6);
+    --border-color: rgba(255,255,255,0.05);
+    --warm-bg: #302d2a;
+}
+
+/* --- 2. RESETS & 1% PREMIUM TOUCHES --- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+::selection { background-color: var(--accent); color: var(--bg-color); }
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-color); transition: background 0.4s ease; }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+/* --- 3. GLOBALS & TYPOGRAPHY --- */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-color);
+    color: var(--text-main);
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), color 0.4s ease;
+}
+
+.nav, footer { transition: background-color 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94), border-color 0.3s ease; }
+.social-pill { transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, transform 0.3s ease; }
+
+h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 8vw, 5.5rem); margin-bottom: 1.5rem; font-weight: 600; letter-spacing: -0.5px; min-height: 1.2em; }
+i.fa-solid, i.fas, i.fab, .social-pill i { font-weight: 900 !important; }
+
+.section { padding: 6rem 5%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 10; }
+.section-title { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 3rem; color: inherit; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+
+/* --- 4. COMPONENTS --- */
+
+/* Logo & Fallback */
+.logo-container img { height: 55px; transition: filter 0.3s ease, opacity 0.4s ease-in-out; }
+.text-logo-fallback { transition: color 0.4s ease; }
+
+/* Glassmorphism Navigation */
+.nav {
+    position: fixed; top: 0; left: 0; width: 100%; z-index: 100; padding: 1.2rem 5%;
+    display: flex; justify-content: space-between; align-items: center;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border-color);
+    transform: translateZ(0); backface-visibility: hidden;
+}
+.nav-controls { display: flex; align-items: center; gap: 2rem; }
+.nav-wrapper { display: flex; align-items: center; }
+.nav-links { display: flex; gap: 2rem; }
+.nav-links a { color: var(--text-main); text-decoration: none; font-weight: 500; padding-bottom: 2px; position: relative; transition: color 0.3s ease; }
+.nav-links a::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background-color: var(--accent); transform: scaleX(0); transition: transform 0.3s ease; }
+.nav-links a:hover::after { transform: scaleX(1); }
+.nav-links a:hover { color: var(--accent); }
+
+/* SVG Toggle Buttons */
+.nav-actions { display: flex; align-items: center; gap: 1.5rem; position: relative; z-index: 1000; }
+.toggle-btn { z-index: 1002 !important; position: relative; }
+.toggle-btn, .mobile-toggle {
+    background: none; border: none; color: var(--text-main) !important; font-size: 1.5rem;
+    cursor: pointer; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+}
+.toggle-btn svg, .mobile-toggle svg { transition: color 0.3s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.toggle-btn svg.is-spinning { animation: theme-toggle 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) both; }
+.toggle-btn:hover, .mobile-toggle:hover { color: var(--accent) !important; transform: scale(1.1); }
+@media (min-width: 769px) { .mobile-toggle { display: none; } }
+
+/* Hero CTA */
+.cta-link {
+    display: inline-block; margin-top: 2rem; color: var(--accent); text-decoration: none;
+    padding: 0.9rem 2.2rem; border-radius: 50px; border: 2px solid var(--accent);
+    transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+}
+.cta-link:hover { background: var(--accent); color: var(--bg-color); box-shadow: 0 8px 20px rgba(0,0,0,0.08); }
+
+/* Glass Cards */
+.card {
+    background: var(--surface-light);
+    padding: 2.8rem; border-radius: 24px; border: 1px solid rgba(0,0,0,0.05);
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.03);
+    transition: transform 0.3s cubic-bezier(0.34, 1.4, 0.64, 1), box-shadow 0.3s ease, border-color 0.25s ease;
+    height: 100%; display: flex; flex-direction: column; justify-content: flex-start;
+    transform: translateZ(0); backface-visibility: hidden;
+    will-change: transform;
+}
+.card-link { text-decoration: none; color: inherit; display: block; height: 100%; }
+.link-indicator { display: inline-block; margin-top: 1.5rem; font-size: 0.9rem; font-weight: 600; color: var(--accent); opacity: 0; transform: translateX(-10px); transition: all 0.3s ease; }
+.card-link:hover .link-indicator { opacity: 1; transform: translateX(0); }
+.studio-card { border-left: 4px solid var(--accent); }
+.enlarged-card { padding: 4rem; background: var(--surface-light); }
+.enlarged-card h3 { font-size: 2.2rem; margin-bottom: 1rem; }
+@media (min-width: 768px) { .span-2 { grid-column: span 2; } }
+
+/* Footer & Social */
+.footer-main {
+    text-align: center; padding: 3rem 5%; background: var(--bg-color); border-top: 1px solid var(--border-color);
+    font-family: 'Inter', sans-serif; max-width: 100% !important;
+}
+.footer-main p { color: var(--text-muted); margin-top: 1rem; }
+.social-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-bottom: 2rem;}
+.social-pill {
+    display: flex; align-items: center; gap: 0.7rem; padding: 0.8rem 1.8rem; background: var(--surface-light); border-radius: 50px;
+    color: var(--text-main); text-decoration: none; border: 1px solid var(--border-color);
+    transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
+}
+.social-pill:hover { background: var(--accent); color: var(--bg-color); border-color: var(--accent); transform: translateY(-3px); }
+
+/* --- 5. ANIMATIONS --- */
+
+/* Theme Rotation */
+@keyframes theme-toggle {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(1.2); opacity: 0.5; }
+    100% { transform: rotate(360deg) scale(1); opacity: 1; }
+}
+
+/* ── MARQUEE COMPONENT — Refactored ──────────────────────────────────────── */
+
+.bg-narrative-layer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100vw;
+    /*
+     * REMOVED: height: 100vh
+     * position:fixed is already viewport-constrained by the browser.
+     * An explicit height created a smaller clipping box on iOS Safari
+     * where 100vh includes the address bar.
+     */
+    z-index: -1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /*
+     * CHANGED: overflow:hidden → overflow:clip
+     * `clip` clips to the border-box without creating a new scroll container
+     * (which hidden does). This prevents horizontal text bleed while
+     * allowing the GPU to composite the layer freely on the vertical axis.
+     */
+    overflow: clip;
+    pointer-events: none;
+}
+
+.parallax-wrapper {
+    width: 100%;
+    /*
+     * ADD overflow:clip here to isolate each track row's horizontal clipping
+     * without constraining the vertical axis of the parent.
+     */
+    overflow: clip;
+}
+
+.marquee-track {
+    display: flex;
+    white-space: nowrap;
+    width: max-content;
+    will-change: transform;
+    /*
+     * REMOVED: animation: marquee-scroll
+     * The JS controller owns transform exclusively. Leaving a CSS animation
+     * on the same property causes the browser to fight itself every frame.
+     *
+     * REMOVED: margin-bottom: -2vw
+     * Negative margin was pulling tracks into each other, corrupting the
+     * vertical overflow math and making the clipping unpredictable.
+     *
+     * ADDED: padding-block
+     * Gives Playfair Display's ascenders and descenders room inside the
+     * painted box. Without this, overflow:clip still clips them.
+     */
+    padding-block: 0.25em;
+}
+
+.bg-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(5rem, 14vw, 14rem);
+    /*
+     * CHANGED: line-height:1 → 1.15
+     * Playfair Display's cap-height and descenders extend beyond a 1:1
+     * line-height box. 1.15 is the minimum safe value for this typeface
+     * before clipping occurs. Paired with padding-block on the track,
+     * this guarantees no character gets painted outside its bounding box.
+     */
+    line-height: 1.15;
+    color: var(--text-main);
+    opacity: 0.03;
+    transition: color 0.4s ease;
+}
+
+/* Hero Section */
+.hero-section { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding-top: 80px; }
+.hero-content { text-align: center; padding: 0 5%; z-index: 10; display: flex; flex-direction: column; align-items: center; }
+h1 { overflow: hidden; perspective: 600px; }
+
+h1 .char {
+    display: inline-block;
+    transform: translateY(105%) rotateX(-80deg);
+    opacity: 0;
+    transform-origin: center bottom;
+}
+
+.hero-subtext {
+    font-size: 1.05rem; color: var(--text-muted); line-height: 1.9; font-weight: 400;
+    max-width: 540px; margin: 0 auto;
+    letter-spacing: 0.015em;
+    word-spacing: 0.04em;
+}
+
+.hero-subtext .word {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(14px);
+    margin-right: 0.3em;
+}
+
+/* Scroll Reveals */
+.reveal-item { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease-out, transform 0.8s var(--ease-out-expo); }
+.reveal-item.is-visible { opacity: 1; transform: translateY(0); will-change: auto; }
+
+/* --- 6. MOBILE OVERRIDES (Performance Focused) --- */
+@media (max-width: 768px) {
+    /* Layout */
+    .hero-section { padding-top: 120px; }
+    .section { padding: 4rem 5%; }
+    .section-title { font-size: 2.2rem; }
+    .enlarged-card { padding: 2.5rem; }
+    .card { padding: 2rem; }
+    .grid { grid-template-columns: 1fr; gap: 1.5rem; }
+
+    /* Mobile Nav */
+    .mobile-toggle { display: flex !important; }
+    .nav-wrapper {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+        background: var(--bg-color); z-index: 200;
+        transform: translateY(-100%); transition: transform 0.4s ease;
+        flex-direction: column; justify-content: center; gap: 2rem;
+    }
+    .nav-wrapper.active { transform: translateY(0); }
+    .nav-links { flex-direction: column; align-items: center; gap: 2rem; width: 100%; font-size: 1.5rem; }
+
+    /* Hero subtext wraps naturally on mobile via JS word-split */
+    .hero-subtext { max-width: 100%; }
+
+    /* FPS Fix: Remove Blur Tax on Mobile */
+    .nav, .nav-wrapper, .card, .social-pill { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+    .card, .social-pill { background-color: rgba(245, 243, 238, 0.98) !important; }
+    .nav { background-color: rgba(245, 243, 238, 1) !important; }
+    [data-theme="dark"] .card, [data-theme="dark"] .social-pill { background-color: rgba(45, 42, 39, 0.98) !important; }
+    [data-theme="dark"] .nav { background-color: rgba(42, 40, 37, 1) !important; }
+    .reveal-item, .card, .marquee-track { will-change: auto !important; }
+}
+
+/* --- 7. SMOOTH SCROLL --- */
+html { scroll-behavior: smooth; }
+
+/* --- 8. CARD HOVER LIFT (CSS-only, GPU-composited) --- */
+.card-link:hover .card {
+    transform: translateY(-5px) translateZ(0);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.07);
+    border-color: var(--accent);
+}
+
+/* --- 9. NAV SCROLL STATE --- */
+.nav { transition: padding 0.4s var(--ease-out-expo), background-color 0.4s ease, border-color 0.3s ease, box-shadow 0.4s ease; }
+.nav.is-scrolled { padding: 0.75rem 5%; box-shadow: 0 4px 30px rgba(0,0,0,0.07); }
+
+/* --- 10. ACTIVE NAV LINKS --- */
+.nav-links a.is-active { color: var(--accent); }
+.nav-links a.is-active::after { transform: scaleX(1); }
+
+/* --- 11. SCROLL VELOCITY SKEW --- */
+main { transform-origin: center top; }
+
+/* --- 12. SECTION EYEBROWS --- */
+.section-eyebrow {
+    display: block; font-family: 'Inter', sans-serif; font-size: 0.72rem;
+    font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 0.75rem;
+}
+.footer-main .section-eyebrow { text-align: center; }
+
+/* --- 13. CARD TAGS --- */
+.card-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-top: 1.5rem; }
+.tag {
+    font-size: 0.68rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    padding: 0.28rem 0.75rem; border-radius: 50px;
+    border: 1px solid var(--border-color); color: var(--text-muted); background: transparent;
+    transition: border-color 0.3s ease, color 0.3s ease;
+}
+.card-link:hover .tag { border-color: var(--accent); color: var(--accent); }
+
+/* --- 14. FOOTER EMAIL CTA --- */
+.footer-email-cta {
+    display: inline-block; font-family: 'Playfair Display', serif;
+    font-size: clamp(0.95rem, 2.2vw, 1.35rem); font-style: italic;
+    color: var(--text-muted); text-decoration: none;
+    border-bottom: 1px solid var(--border-color); padding-bottom: 3px;
+    margin-bottom: 2.5rem;
+    transition: color 0.3s ease, border-color 0.3s ease, letter-spacing 0.4s ease;
+}
+.footer-email-cta:hover { color: var(--accent); border-color: var(--accent); letter-spacing: 0.025em; }
+
+/* --- 15. PAGE LOADER --- */
+.page-loader {
+    position: fixed; inset: 0; z-index: 99999;
+    background: var(--bg-color);
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.9s cubic-bezier(0.77, 0, 0.175, 1);
+}
+.page-loader.loaded { transform: translateY(-100%); pointer-events: none; }
+.loader-inner { text-align: center; }
+.loader-text {
+    font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--text-main); font-weight: 600; letter-spacing: -0.5px;
+    display: block; margin-bottom: 1.5rem;
+}
+.loader-line {
+    display: block; width: 0; height: 2px; background: var(--accent);
+    margin: 0 auto; animation: loader-expand 1.2s var(--ease-out-expo) forwards;
+}
+@keyframes loader-expand { from { width: 0; } to { width: 60px; } }
+
+/* --- 16. NOISE GRAIN TEXTURE --- */
+body::after {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.7' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.028;
+    pointer-events: none;
+    z-index: 9000;
+}
+
+/* --- 17. HORIZONTAL SCROLL STRIP --- */
+.scroll-strip {
+    overflow: hidden; padding: 2.2rem 0;
+    border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color);
+    position: relative; z-index: 10;
+}
+.strip-track {
+    display: flex; white-space: nowrap; width: max-content;
+    animation: strip-scroll 22s linear infinite;
+    will-change: transform; backface-visibility: hidden;
+}
+.strip-track span {
+    font-family: 'Inter', sans-serif; font-size: 0.78rem; font-weight: 600;
+    letter-spacing: 0.35em; text-transform: uppercase; color: var(--text-muted); opacity: 0.6;
+}
+@keyframes strip-scroll {
+    0% { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+}
+
+/* --- 18. CARD NUMBERS --- */
+.card-number {
+    font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 600;
+    color: var(--accent); opacity: 0.12; line-height: 1; display: block; margin-bottom: 0.8rem;
+}
+.enlarged-card .card-number { font-size: 4.5rem; }
+
+/* --- 19. PREMIUM TYPOGRAPHY --- */
+.card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.45rem; font-weight: 600; letter-spacing: -0.3px; margin-bottom: 0.6rem;
+}
+.card p { color: var(--text-muted); line-height: 1.65; font-size: 0.92rem; }
+.enlarged-card h3 { font-size: 2rem; }
+
+/* --- 20. NAV SCRAMBLE --- */
+.nav-links a { display: inline-block; font-variant-numeric: tabular-nums; }
+
+/* --- 21. CARD TILT — transition managed by JS per-state --- */
+.card-link { display: block; }
+
+/* --- 22. STRONGER SECTION TITLE REVEAL --- */
+.section-title.reveal-item {
+    transform: translateY(55px);
+    transition: opacity 0.7s ease-out, transform 1.2s var(--ease-out-expo);
+}
+.section-title.reveal-item.is-visible { transform: translateY(0); }
+
+/* --- 23. BIGGER FOOTER CTA --- */
+.footer-main .section-title { font-size: clamp(2.5rem, 6vw, 4rem) !important; margin-bottom: 1.5rem !important; }
+.footer-main { padding-top: 5rem !important; padding-bottom: 4rem !important; }
+
+/* --- 24. FOCUS VISIBLE (Keyboard navigation) --- */
+:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+}
+
+/* --- 25. REDUCED MOTION --- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration:       0.01ms !important;
+        animation-iteration-count: 1     !important;
+        transition-duration:      0.01ms !important;
+    }
+    .marquee-track, .strip-track { animation-play-state: paused; }
+    html { scroll-behavior: auto; }
+}

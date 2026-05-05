@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="{{ config.meta.description }}">
+    <title>{{ config.meta.site_name }} | Indie Creative Studio</title>
+
+    <!-- Theme flash prevention: runs before paint so dark-mode users never see a light flash -->
+    <script>(function(){try{var t=localStorage.getItem('theme');if(t)document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
+    <link id="dynamic-favicon" rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo-sage.png') }}">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v={{ asset_v('css/style.css') }}">
+</head>
+<body>
+
+    <div class="page-loader" id="page-loader">
+        <div class="loader-inner">
+            <span class="loader-text">Cappyworks</span>
+            <span class="loader-line"></span>
+        </div>
+    </div>
+
+    <div class="bg-narrative-layer" aria-hidden="true">
+        {% for line in config.narrative.lines %}
+        <div class="parallax-wrapper">
+            <div class="marquee-track" {% if loop.index is even %}style="animation-direction: reverse;"{% endif %}>
+                <span class="bg-text">{{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }}</span>
+                <span class="bg-text">{{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }} &nbsp;&bull;&nbsp; {{ line }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <nav class="nav" role="navigation" aria-label="Main Navigation">
+        <a href="#" class="logo-container" aria-label="Home" style="text-decoration: none;">
+            <img id="main-logo"
+                 src="{{ url_for('static', filename='images/logo-sage.png') }}"
+                 data-logo-light="{{ url_for('static', filename='images/logo-sage.png') }}"
+                 data-logo-dark="{{ url_for('static', filename='images/logo-cream.png') }}"
+                 alt="{{ config.meta.site_name }} Logo"
+                 onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <span class="text-logo-fallback" style="display:none; font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 600; color: var(--text-main);">Cappyworks.</span>
+        </a>
+
+        <div class="nav-controls">
+            <div id="nav-wrapper" class="nav-wrapper">
+                <div class="nav-links">
+                    <a href="#work" class="nav-link-item">Work</a>
+                    <a href="#studio" class="nav-link-item">Studio</a>
+                    <a href="#contact" class="nav-link-item">Contact</a>
+                </div>
+            </div>
+
+            <div class="nav-actions">
+                <button id="dark-toggle" class="toggle-btn" aria-label="Toggle Dark Mode">
+                    <svg id="theme-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                </button>
+                <button id="mobile-toggle" class="mobile-toggle" aria-label="Toggle Mobile Menu" aria-expanded="false">
+                    <svg id="menu-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1 id="hero-title" aria-label="Cappyworks."></h1>
+                <p class="hero-subtext">{{ config.meta.description }}</p><br>
+                <a href="#work" class="cta-link magnetic-btn reveal-item" style="transition-delay: 0.6s;">Explore our work</a>
+            </div>
+        </section>
+
+        <section id="work" class="section">
+            <p class="section-eyebrow reveal-item">01 / WORK</p>
+            <h2 class="section-title reveal-item">Selected Works</h2>
+            <div class="grid">
+                {% for service in config.services %}
+                <a href="{{ service.url }}" class="card-link reveal-item {% if service.size == 'large' %}span-2{% endif %}" style="transition-delay: 0.{{ loop.index }}s;">
+                    <div class="card {% if service.size == 'large' %}enlarged-card{% endif %}">
+                        <span class="card-number">{{ '%02d' | format(loop.index) }}</span>
+                        <h3>{{ service.title }}</h3>
+                        <p>{{ service.desc }}</p>
+                        {% if service.tags %}
+                        <div class="card-tags">
+                            {% for tag in service.tags %}<span class="tag">{{ tag }}</span>{% endfor %}
+                        </div>
+                        {% endif %}
+                        <span class="link-indicator" aria-hidden="true">View Case Study &rarr;</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+
+        <div class="scroll-strip" aria-hidden="true">
+            <div class="strip-track">
+                <span>DESIGN &bull; BUILD &bull; SHIP &bull; REPEAT &bull; DESIGN &bull; BUILD &bull; SHIP &bull; REPEAT &bull; </span>
+                <span>DESIGN &bull; BUILD &bull; SHIP &bull; REPEAT &bull; DESIGN &bull; BUILD &bull; SHIP &bull; REPEAT &bull; </span>
+            </div>
+        </div>
+
+        <section id="studio" class="section">
+            <p class="section-eyebrow reveal-item">02 / STUDIO</p>
+            <h2 class="section-title reveal-item">The Studio</h2>
+            <div class="grid">
+                {% for role in config.team %}
+                <a href="{{ role.url }}" target="_blank" rel="noopener noreferrer" class="card-link reveal-item" style="transition-delay: 0.{{ loop.index }}s;">
+                    <div class="card studio-card">
+                        <span class="card-number">{{ '%02d' | format(loop.index) }}</span>
+                        <h3>{{ role.role }}</h3>
+                        <p>{{ role.desc }}</p>
+                        <span class="link-indicator" aria-hidden="true">View Profile &rarr;</span>
+                    </div>
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+
+    <div class="scroll-strip" aria-hidden="true">
+        <div class="strip-track" style="animation-direction: reverse;">
+            <span>CAVITE &bull; GLOBAL &bull; 2026 &bull; INDIE STUDIO &bull; CAVITE &bull; GLOBAL &bull; 2026 &bull; INDIE STUDIO &bull; </span>
+            <span>CAVITE &bull; GLOBAL &bull; 2026 &bull; INDIE STUDIO &bull; CAVITE &bull; GLOBAL &bull; 2026 &bull; INDIE STUDIO &bull; </span>
+        </div>
+    </div>
+
+    <footer id="contact" class="footer-main section">
+        <p class="section-eyebrow reveal-item">03 / CONTACT</p>
+        <h2 class="section-title reveal-item">Let's build something.</h2>
+        <a href="{{ config.social_links.email.url }}" class="footer-email-cta reveal-item" style="transition-delay: 0.1s;">official.cappyworks.services@gmail.com</a>
+
+        <div class="social-grid reveal-item" style="transition-delay: 0.2s;">
+            {% for key, social in config.social_links.items() %}
+                <a href="{{ social.url }}" target="_blank" rel="noopener noreferrer" class="social-pill magnetic-btn" aria-label="{{ social.name }}">
+                    <i class="{{ social.iconClass }}" aria-hidden="true"></i>
+                    <span>{{ social.name }}</span>
+                </a>
+            {% endfor %}
+        </div>
+
+        <p class="reveal-item" style="transition-delay: 0.3s;">&copy; 2026 {{ config.meta.site_name }}. Engineered in Cavite.</p>
+        <p class="reveal-item" style="transition-delay: 0.4s; opacity: 0.5;">Built with Python, Flask, and an uncompromising attention to detail.</p>
+    </footer>
+
+    <!--
+        type="module" is automatically deferred, strict-mode, and scoped.
+        No defer attribute needed. Imports cascade from main.js.
+    -->
+    <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
