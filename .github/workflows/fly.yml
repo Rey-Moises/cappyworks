@@ -10,6 +10,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only -a YOUR_APP_NAME
+      - run: flyctl deploy --remote-only -a cappyworks
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
