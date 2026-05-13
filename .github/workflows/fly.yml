@@ -2,7 +2,8 @@ name: Fly Deploy
 on:
   push:
     branches:
-      - main
+      - main    # Make sure this matches your default branch name
+
 jobs:
   deploy:
     name: Deploy app
@@ -10,6 +11,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only -a cappyworks
+      - run: flyctl deploy --remote-only
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

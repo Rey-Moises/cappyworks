@@ -1,23 +1,45 @@
-# fly.toml app configuration file generated for cappyworks on 2026-05-04T07:53:29Z
-#
-# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
-#
+# fly.io configuration for Cappyworks marketing site
+# Deploy with: fly deploy
+# Rename `app` below if you've already claimed a different name on fly.io.
 
-app = 'cappyworks'
-primary_region = 'sin'
+app = "cappyworks"
+primary_region = "sin"   # Singapore — closest fly region to Cavite, PH
+kill_signal = "SIGINT"
+kill_timeout = 5
 
 [build]
+
+[env]
+  PORT = "8080"
+  SITE_URL = "https://cappyworks.com"
+  FROM_NAME = "Cappyworks Studio"
 
 [http_service]
   internal_port = 8080
   force_https = true
-  auto_stop_machines = 'stop'
+  auto_stop_machines = "stop"
   auto_start_machines = true
   min_machines_running = 0
-  processes = ['app']
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 100
+    hard_limit = 200
+
+  [[http_service.checks]]
+    grace_period  = "10s"
+    interval      = "30s"
+    method        = "GET"
+    path          = "/healthz"
+    protocol      = "http"
+    timeout       = "5s"
 
 [[vm]]
-  memory = '1gb'
-  cpu_kind = 'shared'
+  size = "shared-cpu-1x"
+  memory = "256mb"
   cpus = 1
-  memory_mb = 512
+
+[[statics]]
+  guest_path = "/app/static"
+  url_prefix = "/static"
